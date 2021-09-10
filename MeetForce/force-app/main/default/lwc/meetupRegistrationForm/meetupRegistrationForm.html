@@ -1,0 +1,11 @@
+<template>
+    <template if:true={meetupName}>
+        <lightning-card title={meetupName} icon-name="standard:record">
+            <div class="slds-m-around_medium">
+                <lightning-input label="First Name" value={firstName}></lightning-input>
+                <lightning-input label="Last Name" value={lastName}></lightning-input>
+                <lightning-input label="Email" value={email} class="slds-m-bottom_x-small"></lightning-input>
+            </div>
+        </lightning-card>
+    </template>
+</template>
