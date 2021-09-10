@@ -18,4 +18,34 @@ public with sharing class MeetupRegistrationHelper {
             }
         }
     }
+    /*
+    * Fetches a single meetup matching the registration code provided.
+    * Sends an error message if that meetup is closed or full.
+    */
+    /*@AuraEnabled (cacheable=true)
+    public static Meetup__c getMeetupByRegistrationCode(String regCode) {
+        Meetup__c meetup = [SELECT Id, Name, RegistrationLimit__c, NumberOfRegistrations__c, Status__c
+            FROM Meetup__c WHERE RegistrationCode__c =: regCode LIMIT 1];
+
+        if (meetup.NumberOfRegistrations__c >= meetup.RegistrationLimit__c)
+            throw new AuraHandledException('This Meetup is currently at its maximum number of registrations.');
+
+        if (meetup.Status__c == 'Closed')
+            throw new AuraHandledException('This Meetup is closed.');
+
+        return meetup;
+    }*/
+    @AuraEnabled (cacheable=true)
+    public static String registrationIsOpen(Id recordId) {
+        Meetup__c meetup = [SELECT RegistrationLimit__c, NumberOfRegistrations__c, Status__c
+        FROM Meetup__c WHERE Id =: recordId];
+
+        if (meetup.NumberOfRegistrations__c >= meetup.RegistrationLimit__c)
+            return 'This Meetup is currently at its maximum number of registrations.';
+
+        if (meetup.Status__c == 'Closed')
+            return 'This Meetup is closed.';
+
+        return 'This Meetup is open.';
+    }
 }

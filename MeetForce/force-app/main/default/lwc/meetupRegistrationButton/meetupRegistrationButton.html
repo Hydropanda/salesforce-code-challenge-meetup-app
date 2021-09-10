@@ -1,0 +1,11 @@
+<template>
+    <lightning-card>
+        <template if:true={buttonActive}>
+            <lightning-button variant="brand" label="Register for Meetup" onclick={navigateToRegistration}></lightning-button>
+        </template>
+        <template if:false={buttonActive}>
+            <lightning-button variant="brand" label="Register for Meetup" disabled></lightning-button>
+            <lightning-card>{registrationAvailability}</lightning-card>
+        </template>
+    </lightning-card>
+</template>
