@@ -87,8 +87,9 @@
         <relatedList>RelatedNoteList</relatedList>
     </relatedLists>
     <relatedLists>
-        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
+        <fields>FirstName__c</fields>
+        <fields>LastName__c</fields>
         <fields>Email__c</fields>
         <relatedList>MeetupRegistration__c.Meetup__c</relatedList>
     </relatedLists>

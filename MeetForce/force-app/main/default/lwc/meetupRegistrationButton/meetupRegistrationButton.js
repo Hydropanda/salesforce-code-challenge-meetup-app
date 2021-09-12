@@ -9,7 +9,6 @@ export default class MeetupRegistrationButton extends NavigationMixin(LightningE
     @api recordId;
 
     regCode;
-    url;
     registrationAvailability;
     @track buttonActive;
 
@@ -28,7 +27,7 @@ export default class MeetupRegistrationButton extends NavigationMixin(LightningE
         }
     };
 
-    @wire(getRecord, { recordId: 'recordId', fields: [REG_CODE_FIELD]})
+    @wire(getRecord, { recordId: '$recordId', fields: [REG_CODE_FIELD]})
     wiredRecord ({ error, data }) {
         if (data) {
             this.regCode = getFieldValue(data, REG_CODE_FIELD);
@@ -37,21 +36,15 @@ export default class MeetupRegistrationButton extends NavigationMixin(LightningE
             this.buttonActive = false;
         }
     }
-    navigateToRegistration(evt) {
-
-        evt.preventDefault();
-        evt.stopPropogation();
-
-        regPageRef = {
+    navigateToRegistration(event) {
+        this[NavigationMixin.Navigate]({
             type: 'standard__component',
             attributes: {
-                componentName: 'c__meetupRegistrationForm'
+                componentName: 'c__MeetupRegistrationFormWrapper'
             },
             state: {
-                regCode: this.regCode
+                c__regCode: this.regCode
             }
-        }
-
-        this[NavigationMixin.Navigate](regPageRef);
+        });
     }
 }
