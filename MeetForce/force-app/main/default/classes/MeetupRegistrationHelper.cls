@@ -44,11 +44,11 @@ public with sharing class MeetupRegistrationHelper {
         Meetup__c meetup = [SELECT RegistrationLimit__c, NumberOfRegistrations__c, Status__c
         FROM Meetup__c WHERE Id =: recordId];
 
+        if (meetup.Status__c == 'Closed')
+        return 'This Meetup is closed.';
+
         if (meetup.NumberOfRegistrations__c >= meetup.RegistrationLimit__c)
             return 'This Meetup is currently at its maximum number of registrations.';
-
-        if (meetup.Status__c == 'Closed')
-            return 'This Meetup is closed.';
 
         return 'This Meetup is open.';
     }
