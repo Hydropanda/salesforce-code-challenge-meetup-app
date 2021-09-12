@@ -36,6 +36,10 @@ public with sharing class MeetupRegistrationHelper {
         return meetup;
     }*/
     @AuraEnabled (cacheable=true)
+    public static Id getMeetupIdByRegistrationCode(String regCode) {
+        return [SELECT Id FROM Meetup__c WHERE RegistrationCode__c =: regCode LIMIT 1].Id;
+    }
+    @AuraEnabled (cacheable=true)
     public static String registrationIsOpen(Id recordId) {
         Meetup__c meetup = [SELECT RegistrationLimit__c, NumberOfRegistrations__c, Status__c
         FROM Meetup__c WHERE Id =: recordId];
@@ -47,5 +51,24 @@ public with sharing class MeetupRegistrationHelper {
             return 'This Meetup is closed.';
 
         return 'This Meetup is open.';
+    }
+    public static void verifyUniqueEmail(List<MeetupRegistration__c> meetupRegs) {
+        Set<Id> parentIds = new Set<Id>();
+        for (MeetupRegistration__c meetupReg: meetupRegs) {
+            parentIds.add(meetupReg.Meetup__c);
+        }
+        Map<Id, Meetup__c> parentMeetups = new Map<Id, Meetup__c>(
+            [SELECT Id, (SELECT Email__c FROM MeetupRegistrations__r) FROM Meetup__c WHERE Id IN: parentIds]);
+
+        for (MeetupRegistration__c meetupReg: meetupRegs) {
+            Meetup__c parentMeetup = parentMeetups.get(meetupReg.Meetup__c);
+            Set<String> emails = new Set<String>();
+
+            for (MeetupRegistration__c childMeetupReg: parentMeetup.MeetupRegistrations__r)
+                emails.add(childMeetupReg.Email__c.toLowerCase());
+
+            if (emails.contains(meetupReg.Email__c.toLowerCase()))
+                meetupReg.addError('Meetup Registrations of the same Meetup must have unique email addresses.');
+        }
     }
 }

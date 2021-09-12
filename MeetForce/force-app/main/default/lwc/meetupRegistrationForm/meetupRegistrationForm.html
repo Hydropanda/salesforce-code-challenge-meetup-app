@@ -1,11 +1,10 @@
+<!---
+    Make an ordinary lightning create form. Validate unique email in Apex trigger.
+-->
 <template>
-    <template if:true={meetupName}>
-        <lightning-card title={meetupName} icon-name="standard:record">
-            <div class="slds-m-around_medium">
-                <lightning-input label="First Name" value={firstName}></lightning-input>
-                <lightning-input label="Last Name" value={lastName}></lightning-input>
-                <lightning-input label="Email" value={email} class="slds-m-bottom_x-small"></lightning-input>
-            </div>
-        </lightning-card>
-    </template>
+    <lightning-card title={registerPrompt} icon-name="standard:record">
+        <div class="slds-m-around_medium">
+            <lightning-record-form object-api-name={objectApiName} fields={fields} onsubmit={handleSubmit}></lightning-record-form>
+        </div>
+    </lightning-card>
 </template>
